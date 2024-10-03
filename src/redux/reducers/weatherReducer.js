@@ -8,7 +8,7 @@ const initialState = {
   data: null,
   error: null,
   loading: false,
-  unit: "metric" // 'metric' for Celsius, 'imperial' for Fahrenheit
+  unit: "metric"
 };
 
 const weatherReducer = (state = initialState, action) => {

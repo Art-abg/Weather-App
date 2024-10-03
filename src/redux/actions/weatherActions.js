@@ -11,16 +11,13 @@ export const fetchWeather = (query) => async (dispatch, getState) => {
   try {
     let url;
     if (typeof query === "string" && query.includes("lat=")) {
-      // It's coordinates
       url = `https://api.openweathermap.org/data/2.5/weather?${query}&appid=${apiKey}&units=${unit}`;
     } else {
-      // It's a city name
       url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=${unit}`;
     }
 
     const currentWeatherResponse = await axios.get(url);
 
-    // Similar adjustment for forecast URL
     const forecastUrl = url.replace("weather?", "forecast?");
     const forecastResponse = await axios.get(forecastUrl);
 
