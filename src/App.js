@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { Provider, useDispatch } from "react-redux";
+import store from "./redux/store";
+import Weather from "./components/Weather";
+import { fetchWeather } from "./redux/actions/weatherActions";
+import "./styles/App.scss";
 
-function App() {
+function AppContent() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(`Geolocation success: ${latitude}, ${longitude}`);
+          dispatch(fetchWeather(`lat=${latitude}&lon=${longitude}`));
+        },
+        (error) => {
+          console.log(`Geolocation error: ${error.message}`);
+          dispatch(fetchWeather("Yerevan"));
+        }
+      );
+    } else {
+      console.log("Geolocation not supported");
+      dispatch(fetchWeather("Yerevan"));
+    }
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Weather />
     </div>
+  );
+}
+function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
   );
 }
 
